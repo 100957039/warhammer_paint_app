@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
 import 'theme/app_theme.dart';
 import 'package:warhammer_paint_app/navigation.dart';
+import 'package:flutter/rendering.dart';
 
-void main() => runApp(const MainApp());
+void main() {
+  //debugPaintSizeEnabled=true; 
+  runApp(MainApp());
+}
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});

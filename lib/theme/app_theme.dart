@@ -192,6 +192,7 @@ class AppTheme {
     colorScheme: colorScheme,
     textTheme: _textTheme,
     appBarTheme: colorScheme.brightness == Brightness.light ? _lightAppBarTheme : _darkAppBarTheme,
+    listTileTheme: _listTileTheme,
     elevatedButtonTheme: elevatedButtonTheme(colorScheme),
     filledButtonTheme: filledButtonTheme(colorScheme),
     textButtonTheme: textButtonTheme(colorScheme),
@@ -516,6 +517,15 @@ class AppTheme {
     ),
   );
 
+  static final ListTileThemeData _listTileTheme = ListTileThemeData(
+    iconColor: Colors.blue,
+    textColor: Colors.black87,
+    tileColor: const Color.fromARGB(255, 231, 230, 230),
+    contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+    shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(12.0),
+    ),
+  );
 
   /// App bar theme for light mode
   static final AppBarTheme _lightAppBarTheme = AppBarTheme(

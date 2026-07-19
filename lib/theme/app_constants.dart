@@ -1,13 +1,3 @@
-/// 🎨 App Design System Constants
-/// 
-/// This file contains all the design tokens used throughout your Flutter app.
-/// Generated with Flutter Theme Generator for consistency and maintainability.
-/// 
-/// Usage examples:
-/// - Spacing: SizedBox(height: AppConstants.spacingMD)
-/// - Border Radius: BorderRadius.circular(AppConstants.radiusLG)
-/// - Animation: AnimationController(duration: AppConstants.durationNormal)
-
 import 'package:flutter/material.dart';
 
 
