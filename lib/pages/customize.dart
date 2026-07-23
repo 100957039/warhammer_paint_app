@@ -11,7 +11,6 @@ class _CustomizePageState extends State<CustomizePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Customize')),
       body: Center(
         child: Column(
           mainAxisAlignment: .center,

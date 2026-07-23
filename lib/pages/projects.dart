@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 
 class ProjectsPage extends StatefulWidget {
   const ProjectsPage({super.key});
@@ -10,13 +9,23 @@ class ProjectsPage extends StatefulWidget {
 class _ProjectsPageState extends State<ProjectsPage> {
   @override
   Widget build(BuildContext context) {
+    // Only shows parent projects
+    final List<Project> parentProjectList = projectList.where((project) => project.parentId == -1).toList();
     return Scaffold(
-      appBar: AppBar(title: const Text('Projects')),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddProject())
+          );
+        },
+        child: const Icon(Icons.add),
+      ),
       body: ListView.separated(
         padding: const EdgeInsets.fromLTRB(24.0, 16.0, 24.0, 16.0),
-        itemCount: projectList.length,
+        itemCount: parentProjectList.length,
         itemBuilder: (BuildContext context, int index) {
-          final currentProject = projectList[index];
+          final currentProject = parentProjectList[index];
 
           return ListTile(
             title: Text(currentProject.name),
@@ -83,6 +92,92 @@ class _SubProjectsPageState extends State<SubProjectsPage> {
   }
 }
 
+class AddProject extends StatelessWidget {
+  const AddProject({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white,),
+        title: Text("Add New Project",
+          style: const TextStyle(color: Colors.white),
+        ), 
+        backgroundColor: Colors.blueGrey[800],
+      ),
+      backgroundColor: Colors.blueGrey[600],
+      body: Padding(
+        padding:  const EdgeInsets.all(16.0),
+        child: Center(
+          child: Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.blueGrey[800],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Min Temp: °C',
+                        style: const TextStyle(
+                          fontSize: 24,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        'Max Temp: °C',
+                        style: const TextStyle(
+                          fontSize: 24,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        'Humidity:%',
+                        style: const TextStyle(
+                          fontSize: 24,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        'Wind Speed:m/s',
+                        style: const TextStyle(
+                          fontSize: 24,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        'UV Index:',
+                        style: const TextStyle(
+                          fontSize: 24,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text('Sunrise:',
+                        style: const TextStyle(
+                          fontSize: 24,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text('Sunset:}',
+                        style: const TextStyle(
+                          fontSize: 24,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        )
+      )
+    );
+  }
+}
+
 class Project{
   final int id;
   final String name;
@@ -97,12 +192,6 @@ class Project{
   Project({required this.id, required this.name, required this.description, required this.startedAt, required this.finishedAt, required this.createdAt, required this.picture, required this.parentId, required this.accountId});
 }
 
-// final List<Object> projectList = <Object>[
-//   [1, 'Project 1', 'Description 1', DateTime.now(), DateTime.now(), DateTime.now(), "Picture Link", 2, 1],
-//   [2, 'Project 2', 'Description 2', DateTime.now(), DateTime.now(), DateTime.now(), "Picture Link", 2, 1],
-//   [3, 'Project 3', 'Description 3', DateTime.now(), DateTime.now(), DateTime.now(), "Picture Link", 2, 1]
-// ];
-
 final List<Project> projectList = List.generate(
   30,
   (i) => Project(
@@ -113,7 +202,7 @@ final List<Project> projectList = List.generate(
     finishedAt: DateTime.now(),
     createdAt: DateTime.now(),
     picture: 'Picture Link',
-    parentId: 2,
+    parentId: -1,
     accountId: 1,
   ),
 );

@@ -211,6 +211,7 @@ class AppTheme {
     sliderTheme: _sliderTheme,
     scaffoldBackgroundColor: colorScheme.surface,
     canvasColor: colorScheme.surface,
+    floatingActionButtonTheme: floatingActionButtonTheme(colorScheme),
   );
 
   // ═══════════════════════════════════════════════════════════════════════════════
@@ -496,6 +497,9 @@ class AppTheme {
     ),
   );
 
+  static FloatingActionButtonThemeData floatingActionButtonTheme(ColorScheme colorScheme) => FloatingActionButtonThemeData(
+    foregroundColor: Color(0xFF00c717),
+  );
 
   /// Input decoration theme
   static final InputDecorationTheme _inputDecorationTheme = InputDecorationTheme(
@@ -577,6 +581,7 @@ class AppTheme {
   /// Bottom navigation bar theme
   static final BottomNavigationBarThemeData _bottomNavigationBarTheme = BottomNavigationBarThemeData(
     type: BottomNavigationBarType.fixed,
+    selectedItemColor: Color(0xFF00c717),
   );
 
   /// Tab bar theme
