@@ -524,7 +524,7 @@ class AppTheme {
   static final ListTileThemeData _listTileTheme = ListTileThemeData(
     iconColor: Colors.blue,
     textColor: Colors.black87,
-    tileColor: const Color.fromARGB(255, 231, 230, 230),
+    tileColor: const Color.fromARGB(255, 243, 243, 243),
     contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
     shape: RoundedRectangleBorder(
     borderRadius: BorderRadius.circular(12.0),

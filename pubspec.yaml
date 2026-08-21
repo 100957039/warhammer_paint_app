@@ -40,6 +40,7 @@ dependencies:
   path: ^1.9.1
   infinite_scroll_pagination: ^5.1.1
   image_field: ^0.0.12
+  collection: ^1.19.1
 
 dev_dependencies:
   flutter_test:

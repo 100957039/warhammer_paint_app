@@ -1,5 +1,5 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 import 'package:warhammer_paint_app/assets/citadel_paint_list.dart';
 
 class PaintsPage extends StatefulWidget {
@@ -21,8 +21,8 @@ class _PaintsPageState extends State<PaintsPage> {
           child: AppBar(
             bottom: const TabBar(tabs: [
             Tab(text: "All",),
-            Tab(text: "Owned",),
-            Tab(text: "Not Owned",),
+            Tab(text: "Inventory",),
+            Tab(text: "Wishlist",),
           ]),
           ),
         ),
@@ -153,10 +153,13 @@ class _BuildPaintListState extends State<BuildPaintList>{
   @override
   Widget build(BuildContext context){
     widget.paints.sort((a, b) {
-      return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+      return compareNatural(a.name.toLowerCase(), (b.name.toLowerCase()));
     });
 
-    return ListView.separated(
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2, crossAxisSpacing: 8, mainAxisSpacing: 4
+      ),
       padding: const EdgeInsets.fromLTRB(24.0, 16.0, 24.0, 16.0),
       itemCount: widget.paints.length,
       itemBuilder: (BuildContext context, int index) {
@@ -170,18 +173,24 @@ class _BuildPaintListState extends State<BuildPaintList>{
                 crossAxisAlignment: WrapCrossAlignment.center,
                 direction: Axis.horizontal,
                 children: [
-                  SizedBox(
-                    width: 36, 
-                    height: 36, 
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                      color: Color(int.parse(currentPaint.hex)),
-                      borderRadius: BorderRadius.circular(4),
+                  Center(
+                    child: SizedBox(
+                      width: 116,
+                      height: 36, 
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                        color: Color(int.parse(currentPaint.hex)),
+                        borderRadius: BorderRadius.circular(4),
+                        ),
                       ),
                     ),
                   ),
-                  SizedBox(width: 12,),
-                  Text(currentPaint.name,),
+                  Center(
+                    child: Text(
+                      currentPaint.name, 
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ],
               ),
               Wrap(
@@ -189,37 +198,40 @@ class _BuildPaintListState extends State<BuildPaintList>{
                 alignment: WrapAlignment.end,
                 direction: Axis.horizontal,
                 children: [
-                  IconButton(
-                    icon: isOwned(currentPaint)
-                    ? Icon(
-                      Icons.check_circle,
-                      color: Theme.of(context).colorScheme.tertiary,
-                      )
-                    : Icon(
-                      Icons.check_circle_outline,
-                      color: Theme.of(context).colorScheme.secondaryContainer,
-                      ),
-                    tooltip: "Add to Owned",
-                    onPressed: (){
-                      setState(() {
-                        if(isOwned(currentPaint)){
-                          Paint newPaint = Paint(id: currentPaint.id, name: currentPaint.name, hex: currentPaint.hex, metallic: currentPaint.metallic, typeId: currentPaint.typeId, colourId: currentPaint.colourId, accountId: currentPaint.accountId);
-                          notOwnedPaintList.add(newPaint);
-                          int index = paintInventoryList.indexWhere((checkingInventory) => checkingInventory.id == currentPaint.id);
-                          paintInventoryList.removeAt(index);
-                        }
-                        else {
-                          PaintInventory newPaint = PaintInventory(id: currentPaint.id, name: currentPaint.name, hex: currentPaint.hex, metallic: currentPaint.metallic, typeId: currentPaint.typeId, colourId: currentPaint.colourId, accountId: currentPaint.accountId, boughtAt: DateTime.now(), inventoryAccountId: 2);
-                          paintInventoryList.add(newPaint);
-                          int index = notOwnedPaintList.indexWhere((checkingInventory) => checkingInventory.id == currentPaint.id);
-                          if(index != -1){
-                            notOwnedPaintList.removeAt(index);
+                  Center(
+                    child: IconButton(
+                      icon: isOwned(currentPaint)
+                      ? Icon(
+                        Icons.check_circle,
+                        color: Theme.of(context).colorScheme.tertiary,
+                        )
+                      : Icon(
+                        Icons.check_circle_outline,
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        ),
+                      tooltip: "Add to Inventory",
+                      onPressed: (){
+                        setState(() {
+                          if(isOwned(currentPaint)){
+                            Paint newPaint = Paint(id: currentPaint.id, name: currentPaint.name, hex: currentPaint.hex, metallic: currentPaint.metallic, typeId: currentPaint.typeId, colourId: currentPaint.colourId, accountId: currentPaint.accountId);
+                            notOwnedPaintList.add(newPaint);
+                            int index = paintInventoryList.indexWhere((checkingInventory) => checkingInventory.id == currentPaint.id);
+                            paintInventoryList.removeAt(index);
                           }
-                          
-                        }
-                      });
-                    },
+                          else {
+                            PaintInventory newPaint = PaintInventory(id: currentPaint.id, name: currentPaint.name, hex: currentPaint.hex, metallic: currentPaint.metallic, typeId: currentPaint.typeId, colourId: currentPaint.colourId, accountId: currentPaint.accountId, boughtAt: DateTime.now(), inventoryAccountId: 2);
+                            paintInventoryList.add(newPaint);
+                            int index = notOwnedPaintList.indexWhere((checkingInventory) => checkingInventory.id == currentPaint.id);
+                            if(index != -1){
+                              notOwnedPaintList.removeAt(index);
+                            }
+                            
+                          }
+                        });
+                      },
+                    ),
                   ),
+                  
                 ],
               ),
             ],
@@ -237,9 +249,6 @@ class _BuildPaintListState extends State<BuildPaintList>{
           
         );
       },
-      separatorBuilder: (context, index) => SizedBox(
-        height: 10,
-      ),
     );
   }
 }
@@ -250,88 +259,58 @@ bool isOwned(Paint currentPaint){
   return isOwned;
 }
 
-class AddPaint extends StatelessWidget {
+class AddPaint extends StatefulWidget {
   const AddPaint({super.key});
+
+  @override
+  AddPaintState createState() {
+    return AddPaintState();
+  }
+}
+
+class AddPaintState extends State<AddPaint> {
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white,),
-        title: Text("Add New Project",
-          style: const TextStyle(color: Colors.white),
-        ), 
-        backgroundColor: Colors.blueGrey[800],
+        title: Text("Add New Paint"), 
       ),
-      backgroundColor: Colors.blueGrey[600],
-      body: Padding(
-        padding:  const EdgeInsets.all(16.0),
-        child: Center(
-          child: Column(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.blueGrey[800],
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      Text(
-                        'Min Temp: °C',
-                        style: const TextStyle(
-                          fontSize: 24,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        'Max Temp: °C',
-                        style: const TextStyle(
-                          fontSize: 24,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        'Humidity:%',
-                        style: const TextStyle(
-                          fontSize: 24,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        'Wind Speed:m/s',
-                        style: const TextStyle(
-                          fontSize: 24,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        'UV Index:',
-                        style: const TextStyle(
-                          fontSize: 24,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text('Sunrise:',
-                        style: const TextStyle(
-                          fontSize: 24,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text('Sunset:}',
-                        style: const TextStyle(
-                          fontSize: 24,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        )
-      )
+      body: Form(
+        key: _formKey,
+        child: Column(
+          children: <Widget>[
+            Text("Paint Name"),
+            TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a paint name';
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 10,),
+            Text("Paint Description"),
+            TextFormField(),
+            SizedBox(height: 10,),
+            ElevatedButton(
+              onPressed: () {
+                // Validate returns true if the form is valid, or false otherwise.
+                if (_formKey.currentState!.validate()) {
+                  // If the form is valid, display a snackbar. In the real world,
+                  // you'd often call a server or save the information in a database.
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Project Added!')),
+                  );
+                  
+                }
+              },
+              child: const Text('Add Paint'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

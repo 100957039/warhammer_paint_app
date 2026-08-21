@@ -5,7 +5,9 @@ import 'package:warhammer_paint_app/pages/paints.dart';
 import 'package:warhammer_paint_app/pages/projects.dart';
 
 class Navigation extends StatefulWidget {
-  const Navigation({super.key});
+  final int? index;
+
+  const Navigation({this.index, super.key});
 
   @override
   State<Navigation> createState() =>
@@ -13,7 +15,7 @@ class Navigation extends StatefulWidget {
 }
 
 class _NavigationState extends State<Navigation> {
-  int _selectedIndex = 0;
+  late int _selectedIndex = widget.index ?? 0;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -63,21 +65,25 @@ class _NavigationState extends State<Navigation> {
     final String title = getTitle(_selectedIndex);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.info_outline),
-            tooltip: "About",
-            onPressed: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const InfoPage())
-              );
-            },
-          ),
-        ],
-        actionsPadding: EdgeInsets.only(right: 8),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(36),
+        child: AppBar(
+          title: Text(title),
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.info_outline),
+              tooltip: "About",
+              onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const InfoPage())
+                );
+              },
+            ),
+          ],
+          actionsPadding: EdgeInsets.only(right: 8),
+        ),
       ),
       body: SizedBox.expand(child: child),      
       bottomNavigationBar: BottomNavigationBar(
